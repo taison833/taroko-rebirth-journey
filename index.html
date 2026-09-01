@@ -8,6 +8,92 @@
 </head>
 <body>
   <div id="root"></div>
+
+<section id="taroko-video-section" class="max-w-[1280px] mx-auto mt-8 rounded-2xl overflow-hidden border border-white/10 bg-black">
+  <video src="./taroko-rebirth.mp4" poster="./poster.jpg" controls playsinline preload="metadata" class="w-full aspect-video"></video>
+  <div class="p-3 text-xs text-white/50 font-mono">00:00 立霧溪漂流 / 01:02 砂卡礑大橋 / 03:02 紫髮重返 / 05:02 長春祠瀑布</div>
+</section>
+
+
+<script>
+// 將影片區塊自動搬到中間區塊
+(function(){
+  function moveVideoToMiddle(){
+    var videoSec = document.getElementById('taroko-video-section');
+    if(!videoSec) return;
+    var root = document.getElementById('root');
+    if(!root || !root.firstElementChild) return;
+    
+    // 找 root 裡面的主容器
+    var mainContainer = root.firstElementChild;
+    // 如果 main 裡還有更深的內容區，往下找有最多子節點的容器當作中間區塊
+    var candidates = root.querySelectorAll('main, [class*="max-w"], section');
+    var target = null;
+    
+    // 優先找包含太魯閣內容的容器
+    for(var i=0;i<candidates.length;i++){
+      var el = candidates[i];
+      // 跳過我們自己的影片區
+      if(el.id === 'taroko-video-section') continue;
+      // 找看起來像中間內容區的
+      if(el.children.length >= 3){
+        target = el;
+        break;
+      }
+    }
+    
+    if(!target) target = mainContainer;
+    
+    if(target){
+      var children = Array.from(target.children);
+      if(children.length > 2){
+        var midIndex = Math.floor(children.length / 2);
+        // 插到中間
+        if(children[midIndex] && children[midIndex] !== videoSec){
+          children[midIndex].insertAdjacentElement('afterend', videoSec);
+        } else {
+          target.appendChild(videoSec);
+        }
+      } else {
+        // 如果子節點少，就直接插到第一個 section 後面
+        var firstSection = target.querySelector('section');
+        if(firstSection){
+          firstSection.insertAdjacentElement('afterend', videoSec);
+        } else {
+          target.appendChild(videoSec);
+        }
+      }
+      videoSec.style.display = 'block';
+      console.log('[Taroko] video moved to middle:', target);
+    }
+  }
+  
+  // 多次嘗試，因為 React 是異步渲染
+  window.addEventListener('load', function(){
+    setTimeout(moveVideoToMiddle, 500);
+    setTimeout(moveVideoToMiddle, 1500);
+    setTimeout(moveVideoToMiddle, 3000);
+  });
+  
+  // 用 MutationObserver 監聽 root 變化，一旦有內容就移動
+  var observer = new MutationObserver(function(){
+    var videoSec = document.getElementById('taroko-video-section');
+    var root = document.getElementById('root');
+    if(videoSec && root && root.firstElementChild && root.firstElementChild.children.length > 1){
+      // 如果影片還在 root 外面，或在底部，就移動
+      if(videoSec.parentElement === document.body || videoSec.parentElement === root){
+        moveVideoToMiddle();
+      }
+    }
+  });
+  
+  setTimeout(function(){
+    var root = document.getElementById('root');
+    if(root) observer.observe(root, {childList: true, subtree: true});
+  }, 500);
+})();
+</script>
+
   
   <script type="module">var _A=Object.create;var{getPrototypeOf:$A,defineProperty:Or,getOwnPropertyNames:e9}=Object;var n9=Object.prototype.hasOwnProperty;var Dn=(e,n,t)=>{t=e!=null?_A($A(e)):{};let f=n||!e||!e.__esModule?Or(t,"default",{value:e,enumerable:!0}):t;for(let r of e9(e))if(!n9.call(f,r))Or(f,r,{get:()=>e[r],enumerable:!0});return f};var Af=(e,n)=>()=>(n||e((n={exports:{}}).exports,n),n.exports);var t9=(e,n)=>{for(var t in n)Or(e,t,{get:n[t],enumerable:!0,configurable:!0,set:(f)=>n[t]=()=>f})};var f9=(e,n)=>()=>(e&&(n=e(e=0)),n);var ot=Af((x9)=>{var at=Symbol.for("react.element"),r9=Symbol.for("react.portal"),u9=Symbol.for("react.fragment"),l9=Symbol.for("react.strict_mode"),v9=Symbol.for("react.profiler"),i9=Symbol.for("react.provider"),A9=Symbol.for("react.context"),P9=Symbol.for("react.forward_ref"),a9=Symbol.for("react.suspense"),o9=Symbol.for("react.memo"),s9=Symbol.for("react.lazy"),ev=Symbol.iterator;function d9(e){if(e===null||typeof e!=="object")return null;return e=ev&&e[ev]||e["@@iterator"],typeof e==="function"?e:null}var fv={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},rv=Object.assign,uv={};function Gn(e,n,t){this.props=e,this.context=n,this.refs=uv,this.updater=t||fv}Gn.prototype.isReactComponent={};Gn.prototype.setState=function(e,n){if(typeof e!=="object"&&typeof e!=="function"&&e!=null)throw Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables.");this.updater.enqueueSetState(this,e,n,"setState")};Gn.prototype.forceUpdate=function(e){this.updater.enqueueForceUpdate(this,e,"forceUpdate")};function lv(){}lv.prototype=Gn.prototype;function Tr(e,n,t){this.props=e,this.context=n,this.refs=uv,this.updater=t||fv}var Gr=Tr.prototype=new lv;Gr.constructor=Tr;rv(Gr,Gn.prototype);Gr.isPureReactComponent=!0;var nv=Array.isArray,vv=Object.prototype.hasOwnProperty,Er={current:null},iv={key:!0,ref:!0,__self:!0,__source:!0};function Av(e,n,t){var f,r={},u=null,l=null;if(n!=null)for(f in n.ref!==void 0&&(l=n.ref),n.key!==void 0&&(u=""+n.key),n)vv.call(n,f)&&!iv.hasOwnProperty(f)&&(r[f]=n[f]);var v=arguments.length-2;if(v===1)r.children=t;else if(1<v){for(var i=Array(v),a=0;a<v;a++)i[a]=arguments[a+2];r.children=i}if(e&&e.defaultProps)for(f in v=e.defaultProps,v)r[f]===void 0&&(r[f]=v[f]);return{$$typeof:at,type:e,key:u,ref:l,props:r,_owner:Er.current}}function c9(e,n){return{$$typeof:at,type:e.type,key:n,ref:e.ref,props:e.props,_owner:e._owner}}function Mr(e){return typeof e==="object"&&e!==null&&e.$$typeof===at}function p9(e){var n={"=":"=0",":":"=2"};return"$"+e.replace(/[=:]/g,function(t){return n[t]})}var tv=/\/+/g;function hr(e,n){return typeof e==="object"&&e!==null&&e.key!=null?p9(""+e.key):n.toString(36)}function af(e,n,t,f,r){var u=typeof e;if(u==="undefined"||u==="boolean")e=null;var l=!1;if(e===null)l=!0;else switch(u){case"string":case"number":l=!0;break;case"object":switch(e.$$typeof){case at:case r9:l=!0}}if(l)return l=e,r=r(l),e=f===""?"."+hr(l,0):f,nv(r)?(t="",e!=null&&(t=e.replace(tv,"$&/")+"/"),af(r,n,t,"",function(a){return a})):r!=null&&(Mr(r)&&(r=c9(r,t+(!r.key||l&&l.key===r.key?"":(""+r.key).replace(tv,"$&/")+"/")+e)),n.push(r)),1;if(l=0,f=f===""?".":f+":",nv(e))for(var v=0;v<e.length;v++){u=e[v];var i=f+hr(u,v);l+=af(u,n,t,i,r)}else if(i=d9(e),typeof i==="function")for(e=i.call(e),v=0;!(u=e.next()).done;)u=u.value,i=f+hr(u,v++),l+=af(u,n,t,i,r);else if(u==="object")throw n=String(e),Error("Objects are not valid as a React child (found: "+(n==="[object Object]"?"object with keys {"+Object.keys(e).join(", ")+"}":n)+"). If you meant to render a collection of children, use an array instead.");return l}function Pf(e,n,t){if(e==null)return e;var f=[],r=0;return af(e,f,"","",function(u){return n.call(t,u,r++)}),f}function D9(e){if(e._status===-1){var n=e._result;n=n(),n.then(function(t){if(e._status===0||e._status===-1)e._status=1,e._result=t},function(t){if(e._status===0||e._status===-1)e._status=2,e._result=t}),e._status===-1&&(e._status=0,e._result=n)}if(e._status===1)return e._result.default;throw e._result}var fe={current:null},of={transition:null},z9={ReactCurrentDispatcher:fe,ReactCurrentBatchConfig:of,ReactCurrentOwner:Er};function Pv(){throw Error("act(...) is not supported in production builds of React.")}x9.Children={map:Pf,forEach:function(e,n,t){Pf(e,function(){n.apply(this,arguments)},t)},count:function(e){var n=0;return Pf(e,function(){n++}),n},toArray:function(e){return Pf(e,function(n){return n})||[]},only:function(e){if(!Mr(e))throw Error("React.Children.only expected to receive a single React element child.");return e}};x9.Component=Gn;x9.Fragment=u9;x9.Profiler=v9;x9.PureComponent=Tr;x9.StrictMode=l9;x9.Suspense=a9;x9.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED=z9;x9.act=Pv;x9.cloneElement=function(e,n,t){if(e===null||e===void 0)throw Error("React.cloneElement(...): The argument must be a React element, but you passed "+e+".");var f=rv({},e.props),r=e.key,u=e.ref,l=e._owner;if(n!=null){if(n.ref!==void 0&&(u=n.ref,l=Er.current),n.key!==void 0&&(r=""+n.key),e.type&&e.type.defaultProps)var v=e.type.defaultProps;for(i in n)vv.call(n,i)&&!iv.hasOwnProperty(i)&&(f[i]=n[i]===void 0&&v!==void 0?v[i]:n[i])}var i=arguments.length-2;if(i===1)f.children=t;else if(1<i){v=Array(i);for(var a=0;a<i;a++)v[a]=arguments[a+2];f.children=v}return{$$typeof:at,type:e.type,key:r,ref:u,props:f,_owner:l}};x9.createContext=function(e){return e={$$typeof:A9,_currentValue:e,_currentValue2:e,_threadCount:0,Provider:null,Consumer:null,_defaultValue:null,_globalName:null},e.Provider={$$typeof:i9,_context:e},e.Consumer=e};x9.createElement=Av;x9.createFactory=function(e){var n=Av.bind(null,e);return n.type=e,n};x9.createRef=function(){return{current:null}};x9.forwardRef=function(e){return{$$typeof:P9,render:e}};x9.isValidElement=Mr;x9.lazy=function(e){return{$$typeof:s9,_payload:{_status:-1,_result:e},_init:D9}};x9.memo=function(e,n){return{$$typeof:o9,type:e,compare:n===void 0?null:n}};x9.startTransition=function(e){var n=of.transition;of.transition={};try{e()}finally{of.transition=n}};x9.unstable_act=Pv;x9.useCallback=function(e,n){return fe.current.useCallback(e,n)};x9.useContext=function(e){return fe.current.useContext(e)};x9.useDebugValue=function(){};x9.useDeferredValue=function(e){return fe.current.useDeferredValue(e)};x9.useEffect=function(e,n){return fe.current.useEffect(e,n)};x9.useId=function(){return fe.current.useId()};x9.useImperativeHandle=function(e,n,t){return fe.current.useImperativeHandle(e,n,t)};x9.useInsertionEffect=function(e,n){return fe.current.useInsertionEffect(e,n)};x9.useLayoutEffect=function(e,n){return fe.current.useLayoutEffect(e,n)};x9.useMemo=function(e,n){return fe.current.useMemo(e,n)};x9.useReducer=function(e,n,t){return fe.current.useReducer(e,n,t)};x9.useRef=function(e){return fe.current.useRef(e)};x9.useState=function(e){return fe.current.useState(e)};x9.useSyncExternalStore=function(e,n,t){return fe.current.useSyncExternalStore(e,n,t)};x9.useTransition=function(){return fe.current.useTransition()};x9.version="18.3.1"});var Dv=Af((fP)=>{function Cr(e,n){var t=e.length;e.push(n);e:for(;0<t;){var f=t-1>>>1,r=e[f];if(0<sf(r,n))e[f]=n,e[t]=r,t=f;else break e}}function Xe(e){return e.length===0?null:e[0]}function Df(e){if(e.length===0)return null;var n=e[0],t=e.pop();if(t!==n){e[0]=t;e:for(var f=0,r=e.length,u=r>>>1;f<u;){var l=2*(f+1)-1,v=e[l],i=l+1,a=e[i];if(0>sf(v,t))i<r&&0>sf(a,v)?(e[f]=a,e[i]=t,f=i):(e[f]=v,e[l]=t,f=l);else if(i<r&&0>sf(a,t))e[f]=a,e[i]=t,f=i;else break e}}return n}function sf(e,n){var t=e.sortIndex-n.sortIndex;return t!==0?t:e.id-n.id}if(typeof performance==="object"&&typeof performance.now==="function")Fr=performance,fP.unstable_now=function(){return Fr.now()};else df=Date,Zr=df.now(),fP.unstable_now=function(){return df.now()-Zr};var Fr,df,Zr,Oe=[],Se=[],tP=1,pe=null,K=3,zf=!1,zn=!1,dt=!1,ov=typeof setTimeout==="function"?setTimeout:null,sv=typeof clearTimeout==="function"?clearTimeout:null,av=typeof setImmediate<"u"?setImmediate:null;typeof navigator<"u"&&navigator.scheduling!==void 0&&navigator.scheduling.isInputPending!==void 0&&navigator.scheduling.isInputPending.bind(navigator.scheduling);function Vr(e){for(var n=Xe(Se);n!==null;){if(n.callback===null)Df(Se);else if(n.startTime<=e)Df(Se),n.sortIndex=n.expirationTime,Cr(Oe,n);else break;n=Xe(Se)}}function Wr(e){if(dt=!1,Vr(e),!zn)if(Xe(Oe)!==null)zn=!0,kr(qr);else{var n=Xe(Se);n!==null&&Jr(Wr,n.startTime-e)}}function qr(e,n){zn=!1,dt&&(dt=!1,sv(ct),ct=-1),zf=!0;var t=K;try{Vr(n);for(pe=Xe(Oe);pe!==null&&(!(pe.expirationTime>n)||e&&!pv());){var f=pe.callback;if(typeof f==="function"){pe.callback=null,K=pe.priorityLevel;var r=f(pe.expirationTime<=n);n=fP.unstable_now(),typeof r==="function"?pe.callback=r:pe===Xe(Oe)&&Df(Oe),Vr(n)}else Df(Oe);pe=Xe(Oe)}if(pe!==null)var u=!0;else{var l=Xe(Se);l!==null&&Jr(Wr,l.startTime-n),u=!1}return u}finally{pe=null,K=t,zf=!1}}var xf=!1,cf=null,ct=-1,dv=5,cv=-1;function pv(){return fP.unstable_now()-cv<dv?!1:!0}function Rr(){if(cf!==null){var e=fP.unstable_now();cv=e;var n=!0;try{n=cf(!0,e)}finally{n?st():(xf=!1,cf=null)}}else xf=!1}var st;if(typeof av==="function")st=function(){av(Rr)};else if(typeof MessageChannel<"u")pf=new MessageChannel,Yr=pf.port2,pf.port1.onmessage=Rr,st=function(){Yr.postMessage(null)};else st=function(){ov(Rr,0)};var pf,Yr;function kr(e){cf=e,xf||(xf=!0,st())}function Jr(e,n){ct=ov(function(){e(fP.unstable_now())},n)}fP.unstable_IdlePriority=5;fP.unstable_ImmediatePriority=1;fP.unstable_LowPriority=4;fP.unstable_NormalPriority=3;fP.unstable_Profiling=null;fP.unstable_UserBlockingPriority=2;fP.unstable_cancelCallback=function(e){e.callback=null};fP.unstable_continueExecution=function(){zn||zf||(zn=!0,kr(qr))};fP.unstable_forceFrameRate=function(e){0>e||125<e?console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported"):dv=0<e?Math.floor(1000/e):5};fP.unstable_getCurrentPriorityLevel=function(){return K};fP.unstable_getFirstCallbackNode=function(){return Xe(Oe)};fP.unstable_next=function(e){switch(K){case 1:case 2:case 3:var n=3;break;default:n=K}var t=K;K=n;try{return e()}finally{K=t}};fP.unstable_pauseExecution=function(){};fP.unstable_requestPaint=function(){};fP.unstable_runWithPriority=function(e,n){switch(e){case 1:case 2:case 3:case 4:case 5:break;default:e=3}var t=K;K=e;try{return n()}finally{K=t}};fP.unstable_scheduleCallback=function(e,n,t){var f=fP.unstable_now();switch(typeof t==="object"&&t!==null?(t=t.delay,t=typeof t==="number"&&0<t?f+t:f):t=f,e){case 1:var r=-1;break;case 2:r=250;break;case 5:r=1073741823;break;case 4:r=1e4;break;default:r=5000}return r=t+r,e={id:tP++,callback:n,priorityLevel:e,startTime:t,expirationTime:r,sortIndex:-1},t>f?(e.sortIndex=t,Cr(Se,e),Xe(Oe)===null&&e===Xe(Se)&&(dt?(sv(ct),ct=-1):dt=!0,Jr(Wr,t-f))):(e.sortIndex=r,Cr(Oe,e),zn||zf||(zn=!0,kr(qr))),e};fP.unstable_shouldYield=pv;fP.unstable_wrapCallback=function(e){var n=K;return function(){var t=K;K=n;try{return e.apply(this,arguments)}finally{K=t}}}});var _l={};t9(_l,{version:()=>OA,unstable_renderSubtreeIntoContainer:()=>bA,unstable_batchedUpdates:()=>wA,unmountComponentAtNode:()=>jA,render:()=>NA,hydrateRoot:()=>yA,hydrate:()=>mA,flushSync:()=>BA,findDOMNode:()=>XA,createRoot:()=>HA,createPortal:()=>gA,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:()=>LA});function p(e){for(var n="https://reactjs.org/docs/error-decoder.html?invariant="+e,t=1;t<arguments.length;t++)n+="&args[]="+encodeURIComponent(arguments[t]);return"Minified React error #"+e+"; visit "+n+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}function hn(e,n){tt(e,n),tt(e+"Capture",n)}function tt(e,n){Zt[e]=n;for(e=0;e<n.length;e++)Xi.add(n[e])}function XP(e){if(du.call(xv,e))return!0;if(du.call(zv,e))return!1;if(HP.test(e))return xv[e]=!0;return zv[e]=!0,!1}function BP(e,n,t,f){if(t!==null&&t.type===0)return!1;switch(typeof n){case"function":case"symbol":return!0;case"boolean":if(f)return!1;if(t!==null)return!t.acceptsBooleans;return e=e.toLowerCase().slice(0,5),e!=="data-"&&e!=="aria-";default:return!1}}function mP(e,n,t,f){if(n===null||typeof n>"u"||BP(e,n,t,f))return!0;if(f)return!1;if(t!==null)switch(t.type){case 3:return!n;case 4:return n===!1;case 5:return isNaN(n);case 6:return isNaN(n)||1>n}return!1}function le(e,n,t,f,r,u,l){this.acceptsBooleans=n===2||n===3||n===4,this.attributeName=f,this.attributeNamespace=r,this.mustUseProperty=t,this.propertyName=e,this.type=n,this.sanitizeURL=u,this.removeEmptyString=l}function Al(e){return e[1].toUpperCase()}function Pl(e,n,t,f){var r=U.hasOwnProperty(n)?U[n]:null;if(r!==null?r.type!==0:f||!(2<n.length)||n[0]!=="o"&&n[0]!=="O"||n[1]!=="n"&&n[1]!=="N")mP(n,t,r,f)&&(t=null),f||r===null?XP(n)&&(t===null?e.removeAttribute(n):e.setAttribute(n,""+t)):r.mustUseProperty?e[r.propertyName]=t===null?r.type===3?!1:"":t:(n=r.attributeName,f=r.attributeNamespace,t===null?e.removeAttribute(n):(r=r.type,t=r===3||r===4&&t===!0?"":""+t,f?e.setAttributeNS(f,n,t):e.setAttribute(n,t)))}function pt(e){if(e===null||typeof e!=="object")return null;return e=Lv&&e[Lv]||e["@@iterator"],typeof e==="function"?e:null}function Xt(e){if(Qr===void 0)try{throw Error()}catch(t){var n=t.stack.trim().match(/\n( *(at )?)/);Qr=n&&n[1]||""}return`
 `+Qr+e}function Ir(e,n){if(!e||Sr)return"";Sr=!0;var t=Error.prepareStackTrace;Error.prepareStackTrace=void 0;try{if(n)if(n=function(){throw Error()},Object.defineProperty(n.prototype,"props",{set:function(){throw Error()}}),typeof Reflect==="object"&&Reflect.construct){try{Reflect.construct(n,[])}catch(a){var f=a}Reflect.construct(e,[],n)}else{try{n.call()}catch(a){f=a}e.call(n.prototype)}else{try{throw Error()}catch(a){f=a}e()}}catch(a){if(a&&f&&typeof a.stack==="string"){for(var r=a.stack.split(`
